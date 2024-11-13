@@ -39,7 +39,27 @@ JOIN
 	orders o ON  o.customer_id = c.id
 JOIN
 	products p ON  p.id = o.product_id;
+    
+    
+#Check average order_sum and also a cursory look at how the numbers are
+#A bit vague with the conditions of high medium and low though
+#I am guessing there is a way to do it with percentiles but I can't figure it out
+SELECT order_sum FROM orders;
+SELECT AVG(order_sum) FROM orders;
 
+
+#Categorizing orders as high, low or medium
+SELECT
+	id,
+    customer_id,
+    order_sum,
+	CASE
+		WHEN order_sum >= 1000 THEN 'High'
+        WHEN order_sum >= 500 THEN 'Medium'
+        ELSE 'Low'
+	END AS 'Revenue Category'
+FROM orders;
+        
 
 
 #Checking my orders to see if there were no orders in October, 2024
