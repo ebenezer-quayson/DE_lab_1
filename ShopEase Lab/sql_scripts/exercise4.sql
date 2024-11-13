@@ -106,29 +106,29 @@ ADD id int AUTO_INCREMENT PRIMARY KEY;
 ALTER TABLE suppliers_data
 ADD supplier_id int AUTO_INCREMENT PRIMARY KEY;
 
-#Table created but was unable to insert the data from suppliers_data
-CREATE TABLE suppliers_partitioned (
-    supplier_id INT,
+#Unable to do the partitions as a result of mysql data_type restrictions
+CREATE TABLE suppliers_data_partitioned (
     supplier_name VARCHAR(100),
-    supplier_address VARCHAR(255),
-    email VARCHAR(100),
-    contact_number VARCHAR(20),
-    fax VARCHAR(20),
-    account_number VARCHAR(50),
-    order_history TEXT,
+    supplier_address VARCHAR(100),
+    email TEXT,
+    contact_number BIGINT,
+    fax BIGINT,
+    account_number BIGINT,
+    order_history BIGINT,
     contract TEXT,
     supplier_country VARCHAR(100),
-    supplier_city VARCHAR(100),
-    country_code VARCHAR(10),
-    country_code_int INT,  -- Integer version of the country code for partitioning
-    PRIMARY KEY (supplier_id, country_code_int)  -- Composite primary key
+    supplier_city TEXT,
+    country_code INT,
+    supplier_id INT AUTO_INCREMENT PRIMARY KEY
 )
-PARTITION BY RANGE (country_code_int) (
-    PARTITION p_germany VALUES LESS THAN (2),
-    PARTITION p_usa VALUES LESS THAN (3),
-    PARTITION p_uk VALUES LESS THAN (4),
-    PARTITION p_canada VALUES LESS THAN (MAXVALUE)
+PARTITION BY LIST (country_code) (
+    PARTITION p_germany VALUES IN (1),
+    PARTITION p_usa VALUES IN (2),
+    PARTITION p_uk VALUES IN (3),
+    PARTITION p_canada VALUES IN (4),
+    PARTITION p_others VALUES IN (5)
 );
+
 
 
 INSERT INTO suppliers_partitioned (supplier_id, supplier_name, supplier_address, email, contact_number, fax, account_number, order_history, contract, supplier_country, supplier_city, country_code, country_code_int)
